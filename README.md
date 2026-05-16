@@ -1,40 +1,37 @@
-# Full-Stack AI Notes Workspace
+AI Notes 🧠✨
 
-A production-ready full-stack notes application featuring AI summarization, automatic saving, and secure authentication.
+A modern AI-powered notes application built for focused writing, smart organization, and seamless productivity.
 
-## Tech Stack
-- **Frontend**: Next.js (App Router), Tailwind CSS, shadcn/ui, React Query, Zustand/Context
-- **Backend**: Node.js, Express, MongoDB, Mongoose, JWT
-- **AI**: Google Gemini API
+🚀 Live Demo
 
-## Setup Instructions
+Frontend:
+https://ai-notes-ten-drab.vercel.app/
 
-### 1. Database & AI Key
-- Get a MongoDB connection string (e.g., from MongoDB Atlas)
-- Get a Google Gemini API Key from Google AI Studio
+Backend API:
+https://ai-notes-h9au.onrender.com
 
-### 2. Backend Setup
-```bash
-cd server
-cp .env.example .env
-# Edit .env with your MONGO_URI and GEMINI_API_KEY
-npm install
-npm start
-```
-
-### 3. Frontend Setup
-```bash
-cd client
-cp .env.example .env.local
-npm install
-npm run dev
-```
-
-## Features
-- AI Note Summarization & Title Generation
-- AI Action Item Extraction
-- Debounced Auto-Save
-- Notes Archiving & Tagging
-- Public Note Sharing
-- Dashboard Analytics
-- Dark Mode
+📌 Features
+🔐 JWT Authentication
+📝 Create, Edit & Delete Notes
+🤖 AI-Powered Assistance
+🌙 Modern Cinematic UI
+📱 Responsive Design
+☁️ Cloud Deployment
+🔒 Protected Routes
+⚡ Fast & Optimized Performance
+🛠️ Tech Stack
+Frontend
+Next.js
+React.js
+Tailwind CSS
+Axios
+Backend
+Node.js
+Express.js
+MongoDB
+Mongoose
+JWT Authentication
+AI Integration
+Google Gemini API
+Deployment
+Vercel (Frontend)
