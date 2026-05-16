@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (name, email, password) => {
-    const res = await api.post('/auth/signup', { name, email, password });
+    const res = await api.post('/auth/register', { name, email, password });
     if (res.data.success) {
       setUser(res.data.data);
       router.push('/dashboard');
