@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  :root {
+    --background: 220 17% 4%;
+    --foreground: 48 25% 94%;
+    --card: 220 17% 7%;
+    --card-foreground: 48 25% 94%;
+    --popover: 220 17% 7%;
+    --popover-foreground: 48 25% 94%;
+    --primary: 35 52% 63%;
+    --primary-foreground: 220 17% 4%;
+    --secondary: 220 11% 12%;
+    --secondary-foreground: 48 25% 94%;
+    --muted: 220 11% 12%;
+    --muted-foreground: 221 13% 70%;
+    --accent: 220 11% 15%;
+    --accent-foreground: 35 52% 63%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 11% 15%;
+    --input: 220 11% 15%;
+    --ring: 35 52% 63%;
+    --radius: 1.5rem;
+  }
+
+  .dark {
+    --background: 220 17% 4%;
+    --foreground: 48 25% 94%;
+    --primary: 35 52% 63%;
+    --border: 220 11% 15%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  body {
+    background-color: #0a0b0d;
+    color: #f3f1ea;
+    @apply antialiased;
+  }
+  
+  /* Global Scrollbar Reset for Cinematic Theme */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1f2228;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #d6a96d40;
+  }
+}
+
+@layer utilities {
+  .text-glow-amber {
+    text-shadow: 0 0 15px rgba(214, 169, 109, 0.3);
+  }
+  .text-glow-white {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #1f2228 transparent;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+}
