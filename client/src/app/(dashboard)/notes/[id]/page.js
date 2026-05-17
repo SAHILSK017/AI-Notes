@@ -21,7 +21,7 @@ export default function NoteEditor() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full w-full absolute inset-0 overflow-hidden">
       <div className="flex-1 flex flex-col h-full bg-[#0f1115] relative overflow-hidden">
         <EditorHeader
           onBack={actions.goBack}
