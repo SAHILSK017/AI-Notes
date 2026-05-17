@@ -90,6 +90,9 @@ exports.processAiAction = asyncHandler(async (req, res, next) => {
     } else if (action === 'action_items' && result.actionItems) {
       note.aiActionItems = result.actionItems;
       isModified = true;
+    } else if (action === 'insights' && result.category) {
+      note.category = result.category;
+      isModified = true;
     } else if ((action === 'title' || action === 'auto_title') && result.suggestedTitle) {
       note.title = result.suggestedTitle;
       isModified = true;

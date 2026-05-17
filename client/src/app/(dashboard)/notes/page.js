@@ -17,16 +17,37 @@ export default function NotesPage() {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearch = useDebounce(searchTerm, 500);
+  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, noteId: null });
 
+  // Query to fetch filtered notes based on search term, tag, and category
   const { data: notes, isLoading } = useQuery({
-    queryKey: ['notes', debouncedSearch],
+    queryKey: ['notes', debouncedSearch, selectedTag, selectedCategory],
     queryFn: async () => {
-      const res = await api.get(`/notes${debouncedSearch ? `?search=${debouncedSearch}` : ''}`);
+      let url = `/notes?search=${debouncedSearch}`;
+      if (selectedTag) url += `&tag=${selectedTag}`;
+      if (selectedCategory) url += `&category=${selectedCategory}`;
+      const res = await api.get(url);
       return res.data.data;
     },
     enabled: !!user
   });
+
+  // Query to fetch all notes to extract all unique tags and categories for filters
+  const { data: allNotes } = useQuery({
+    queryKey: ['all-notes'],
+    queryFn: async () => {
+      const res = await api.get('/notes');
+      return res.data.data;
+    },
+    enabled: !!user
+  });
+
+  const allTags = allNotes ? Array.from(new Set(allNotes.flatMap(note => note.tags || []))) : [];
+  const allCategories = allNotes 
+    ? Array.from(new Set(allNotes.map(note => note.category).filter(cat => cat && cat !== 'Uncategorized'))) 
+    : [];
 
   const handleCreateNote = async () => {
     try {
@@ -62,21 +83,62 @@ export default function NotesPage() {
           <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter">Your <span className="text-[#d6a96d]/60">Library</span></h1>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="relative group">
+        <div className="flex items-center gap-4 flex-wrap">
+          {/* Search bar */}
+          <div className="relative group shrink-0">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-[#d6a96d] transition-colors" />
             <input 
               type="text" 
               placeholder="Filter archive..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-[#111315] border border-white/[0.05] rounded-2xl pl-12 pr-6 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#d6a96d]/40 focus:border-[#d6a96d]/40 transition-all w-80 placeholder:text-white/10 font-bold shadow-lg"
+              className="bg-[#111315] border border-white/[0.05] rounded-2xl pl-12 pr-6 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-[#d6a96d]/40 focus:border-[#d6a96d]/40 transition-all w-72 placeholder:text-white/10 font-bold shadow-lg"
             />
           </div>
+
+          {/* Tag Filter */}
+          <div className="relative shrink-0">
+            <select
+              value={selectedTag}
+              onChange={(e) => setSelectedTag(e.target.value)}
+              className="bg-[#111315] border border-white/[0.05] rounded-2xl pl-6 pr-10 py-3.5 text-sm text-white/70 focus:outline-none focus:ring-1 focus:ring-[#d6a96d]/40 focus:border-[#d6a96d]/40 transition-all font-bold shadow-lg appearance-none cursor-pointer w-40"
+            >
+              <option value="">All Tags</option>
+              {allTags.map(t => (
+                <option key={t} value={t}>#{t}</option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 text-[10px]">▼</div>
+          </div>
+
+          {/* Category Filter */}
+          <div className="relative shrink-0">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-[#111315] border border-white/[0.05] rounded-2xl pl-6 pr-10 py-3.5 text-sm text-white/70 focus:outline-none focus:ring-1 focus:ring-[#d6a96d]/40 focus:border-[#d6a96d]/40 transition-all font-bold shadow-lg appearance-none cursor-pointer w-44"
+            >
+              <option value="">All Categories</option>
+              {allCategories.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 text-[10px]">▼</div>
+          </div>
+
+          {/* Clear Filters */}
+          {(selectedTag || selectedCategory) && (
+            <button
+              onClick={() => { setSelectedTag(''); setSelectedCategory(''); }}
+              className="px-4 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/10 transition-all active:scale-95 shrink-0"
+            >
+              Reset
+            </button>
+          )}
           
           <button 
             onClick={handleCreateNote}
-            className="flex items-center gap-3 px-8 py-3.5 bg-[#d6a96d] text-[#111315] font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-[#e5b97d] transition-all shadow-xl hover:-translate-y-0.5 active:scale-95"
+            className="flex items-center gap-3 px-8 py-3.5 bg-[#d6a96d] text-[#111315] font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-[#e5b97d] transition-all shadow-xl hover:-translate-y-0.5 active:scale-95 shrink-0"
           >
             <Plus className="w-4 h-4" />
             New Entry
@@ -169,17 +231,28 @@ export default function NotesPage() {
                     </p>
 
                     <div className="mt-auto flex items-center justify-between pt-6 border-t border-white/[0.03]">
-                      <div className="flex gap-2">
-                        {note.tags && note.tags.length > 0 ? (
-                          note.tags.slice(0, 2).map((tag, i) => (
-                            <span key={i} className="text-[9px] font-black uppercase tracking-widest text-white/20 flex items-center gap-1 group-hover:text-[#d6a96d]/40 transition-colors">
-                              <Hash className="w-2.5 h-2.5" />
-                              {tag}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-[9px] font-black uppercase tracking-widest text-white/10 group-hover:text-white/20 transition-colors">Draft Phase</span>
+                      <div className="flex flex-col gap-2.5">
+                        {/* Category Badge */}
+                        {note.category && note.category !== 'Uncategorized' && (
+                          <span className="text-[9px] font-black uppercase tracking-[0.15em] text-[#d6a96d] flex items-center gap-1.5 bg-[#d6a96d]/10 px-2.5 py-1 rounded-lg border border-[#d6a96d]/20 self-start">
+                            <Sparkles className="w-2.5 h-2.5 text-[#d6a96d]" />
+                            {note.category}
+                          </span>
                         )}
+                        
+                        {/* Tags */}
+                        <div className="flex gap-2">
+                          {note.tags && note.tags.length > 0 ? (
+                            note.tags.slice(0, 2).map((tag, i) => (
+                              <span key={i} className="text-[9px] font-black uppercase tracking-widest text-white/20 flex items-center gap-1 group-hover:text-[#d6a96d]/40 transition-colors">
+                                <Hash className="w-2.5 h-2.5" />
+                                {tag}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-[9px] font-black uppercase tracking-widest text-white/10 group-hover:text-white/20 transition-colors">Draft Phase</span>
+                          )}
+                        </div>
                       </div>
                       <ChevronRight className="w-4 h-4 text-white/10 group-hover:text-[#d6a96d] group-hover:translate-x-1 transition-all" />
                     </div>
