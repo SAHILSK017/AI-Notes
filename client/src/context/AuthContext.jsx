@@ -16,12 +16,23 @@ export const AuthProvider = ({ children }) => {
 
   const checkUser = useCallback(async () => {
     try {
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+      }
       const res = await api.get('/auth/me');
       if (res.data.success) {
         setUser(res.data.data);
       }
     } catch (error) {
       setUser(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+      }
     } finally {
       setLoading(false);
     }
@@ -34,6 +45,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password });
     if (res.data.success) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', res.data.data.token);
+      }
       setUser(res.data.data);
       router.push('/dashboard');
     }
@@ -43,6 +57,9 @@ export const AuthProvider = ({ children }) => {
   const signup = async (name, email, password) => {
     const res = await api.post('/auth/register', { name, email, password });
     if (res.data.success) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', res.data.data.token);
+      }
       setUser(res.data.data);
       router.push('/dashboard');
     }
@@ -50,7 +67,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await api.post('/auth/logout');
+    try {
+      await api.post('/auth/logout');
+    } catch (e) {
+      // Ignore logout errors
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
     setUser(null);
     router.push('/login');
   };
