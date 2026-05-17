@@ -23,6 +23,7 @@ export default function AiSidebar({
     { id: 'continue_writing', icon: PenTool, label: 'Continue Flow', category: 'write' },
     { id: 'rewrite', icon: Target, label: 'Refine Style', category: 'write' },
     { id: 'grammar', icon: CheckSquare, label: 'Fix Syntax', category: 'write' },
+    { id: 'title', icon: Type, label: 'Suggest Title', category: 'write' },
   ];
 
   const actionLabels = {
@@ -33,6 +34,7 @@ export default function AiSidebar({
     continue_writing: 'Extending neural flow...',
     rewrite: 'Refining delivery...',
     grammar: 'Perfecting syntax...',
+    title: 'Suggesting neural title...',
   };
 
   return (
