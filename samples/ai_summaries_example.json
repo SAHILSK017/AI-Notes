@@ -1,0 +1,20 @@
+{
+  "example_case": "AI-Augmented Unstructured Note Transformation",
+  "unstructured_input": "We need to focus on migrating all state tracking variables to standard bearer tokens. Right now we are getting constant 401 response errors on Safari and Brave browsers due to cookies getting rejected in cross-site redirects. Let's write an Axios request interceptor. Let's make sure Vercel environment base URL is robust and always appends /api.",
+  "ai_generation_output": {
+    "suggested_title": "Fortifying Workspace Authentication Architecture",
+    "summary": "Migration of client-side authentication from standard session cookies to Stateless JWT Bearer tokens to resolve Safari/Brave cross-domain blocking issues, including interceptor development and Base URL config fortification.",
+    "action_items": [
+      "Implement JWT token storage in browser localStorage.",
+      "Build Axios Request Interceptor to dynamically attach Bearer authorization headers.",
+      "Validate and append /api routing paths to Vercel environment configurations."
+    ],
+    "insights": {
+      "readingTime": "1 min read",
+      "category": "Engineering",
+      "sentiment": "Neutral",
+      "complexity": "Advanced"
+    },
+    "tags": ["authentication", "jwt", "axios", "security"]
+  }
+}

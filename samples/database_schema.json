@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Notes Database Schema & Sample Dump",
+  "description": "MongoDB collection definitions and sample documents for the AI Notes Workspace platform.",
+  "collections": {
+    "users": {
+      "description": "Stores user registration and authentication details.",
+      "schema": {
+        "name": { "type": "String", "required": true },
+        "email": { "type": "String", "required": true, "unique": true },
+        "password": { "type": "String", "required": true, "select": false },
+        "createdAt": { "type": "Date" },
+        "updatedAt": { "type": "Date" }
+      },
+      "sample_document": {
+        "_id": "60d5ec49c9e37c1d3c8e4e9f",
+        "name": "Jane Doe",
+        "email": "jane.doe@workspace.ai",
+        "createdAt": "2026-05-15T02:21:47.000Z",
+        "updatedAt": "2026-05-15T02:21:47.000Z",
+        "__v": 0
+      }
+    },
+    "notes": {
+      "description": "Stores user notes, tag groups, categories, and AI-augmented dynamic content summaries.",
+      "schema": {
+        "userId": { "type": "ObjectId", "ref": "User", "required": true },
+        "title": { "type": "String", "default": "Untitled Note" },
+        "content": { "type": "String", "default": "" },
+        "tags": { "type": "Array of Strings", "default": [] },
+        "category": { "type": "String", "default": "Uncategorized" },
+        "archived": { "type": "Boolean", "default": false },
+        "isPublic": { "type": "Boolean", "default": false },
+        "shareId": { "type": "String", "unique": true, "sparse": true },
+        "aiSummary": { "type": "String", "default": "" },
+        "aiActionItems": { "type": "Array of Strings", "default": [] },
+        "createdAt": { "type": "Date" },
+        "updatedAt": { "type": "Date" }
+      },
+      "sample_document": {
+        "_id": "60d5ec49c9e37c1d3c8e4ea0",
+        "userId": "60d5ec49c9e37c1d3c8e4e9f",
+        "title": "Artificial Intelligence in the Fourth Industrial Revolution (4IR)",
+        "content": "Artificial Intelligence is widely regarded as the core driving force of the Fourth Industrial Revolution (4IR). By synthesizing vast oceans of data into actionable insights, AI is fundamentally altering the landscape of global production, logistics, and innovation...",
+        "tags": ["artificial-intelligence", "4ir", "innovation"],
+        "category": "Technology",
+        "archived": false,
+        "isPublic": true,
+        "shareId": "1b9f6e3c0a2b4c6d8e0f2a4b6c8d0e2f",
+        "aiSummary": "Artificial Intelligence is the core catalyst of the Fourth Industrial Revolution (4IR), revolutionizing global production, logistics, and enterprise operations.",
+        "aiActionItems": [
+          "Synthesize production and logistics data to drive insights.",
+          "Formulate strategic guidelines for safe technology adoption.",
+          "Establish robust ethical governance frameworks."
+        ],
+        "createdAt": "2026-05-16T14:17:21.000Z",
+        "updatedAt": "2026-05-17T04:02:13.000Z",
+        "__v": 0
+      }
+    }
+  }
+}

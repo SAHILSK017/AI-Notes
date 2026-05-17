@@ -1,0 +1,75 @@
+{
+  "api_version": "v1",
+  "base_urls": {
+    "local": "http://localhost:5000/api",
+    "production": "https://ai-notes-h9au.onrender.com/api"
+  },
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "description": "Authenticate user and return JWT stateless token.",
+      "request_body": {
+        "email": "jane.doe@workspace.ai",
+        "password": "securepassword123"
+      },
+      "response": {
+        "success": true,
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZDFlYzQ5YzllMzdjMWQzYzhlNGU5ZiIsImlhdCI6MTc3ODk5MDQ5OSwiZXhwIjoxNzgxNTgyNDk5fQ...",
+        "user": {
+          "_id": "60d5ec49c9e37c1d3c8e4e9f",
+          "name": "Jane Doe",
+          "email": "jane.doe@workspace.ai"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notes/:id/ai",
+      "description": "Process dynamic AI tasks using Gemini on a specific note.",
+      "request_body": {
+        "action": "summary"
+      },
+      "responses_by_action": {
+        "summary": {
+          "success": true,
+          "data": {
+            "summary": "AI is the core catalyst of the Fourth Industrial Revolution (4IR), reshaping production, supply chains, and operational workflows globally."
+          },
+          "note": {
+            "_id": "60d5ec49c9e37c1d3c8e4ea0",
+            "userId": "60d5ec49c9e37c1d3c8e4e9f",
+            "title": "Artificial Intelligence in the Fourth Industrial Revolution (4IR)",
+            "content": "...",
+            "aiSummary": "AI is the core catalyst of the Fourth Industrial Revolution (4IR), reshaping production, supply chains, and operational workflows globally."
+          }
+        },
+        "action_items": {
+          "success": true,
+          "data": {
+            "actionItems": [
+              "Synthesize production and logistics data to drive insights.",
+              "Formulate strategic guidelines for safe technology adoption.",
+              "Establish robust ethical governance frameworks."
+            ]
+          }
+        },
+        "insights": {
+          "success": true,
+          "data": {
+            "readingTime": "2 min read",
+            "category": "Technology",
+            "sentiment": "Positive",
+            "complexity": "Intermediate"
+          }
+        },
+        "title": {
+          "success": true,
+          "data": {
+            "suggestedTitle": "AI: The Engine of 4IR"
+          }
+        }
+      }
+    }
+  ]
+}
