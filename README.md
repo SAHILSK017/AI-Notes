@@ -124,3 +124,139 @@ The interface will compile and run at **`http://localhost:3000`**.
 
 ### 📝 Auto-Save Architecture
 - Changes to note title, content, or tags are debounced and automatically patched to the database behind the scenes, featuring save status indicators ("Saving...", "Saved", "Error").
+
+---
+
+## 4. Sample Outputs
+
+To aid in understanding the data flows, integrations, and database architecture, the following live samples demonstrate the exact format of the system inputs, AI responses, and database entries.
+
+### 📝 Database Schema
+
+The core MongoDB documents are defined as follows:
+
+#### User Collection Document
+```json
+{
+  "_id": "60d5ec49c9e37c1d3c8e4e9f",
+  "name": "Jane Doe",
+  "email": "jane.doe@workspace.ai",
+  "createdAt": "2026-05-15T02:21:47.000Z",
+  "updatedAt": "2026-05-15T02:21:47.000Z",
+  "__v": 0
+}
+```
+
+#### Note Collection Document
+```json
+{
+  "_id": "60d5ec49c9e37c1d3c8e4ea0",
+  "userId": "60d5ec49c9e37c1d3c8e4e9f",
+  "title": "Artificial Intelligence in the Fourth Industrial Revolution (4IR)",
+  "content": "Artificial Intelligence is widely regarded as the core driving force of the Fourth Industrial Revolution (4IR). By synthesizing vast oceans of data into actionable insights, AI is fundamentally altering the landscape of global production, logistics, and innovation...",
+  "tags": ["artificial-intelligence", "4ir", "innovation"],
+  "category": "Technology",
+  "archived": false,
+  "isPublic": true,
+  "shareId": "1b9f6e3c0a2b4c6d8e0f2a4b6c8d0e2f",
+  "aiSummary": "Artificial Intelligence is the core catalyst of the Fourth Industrial Revolution (4IR), revolutionizing global production, logistics, and enterprise operations.",
+  "aiActionItems": [
+    "Synthesize production and logistics data to drive insights.",
+    "Formulate strategic guidelines for safe technology adoption.",
+    "Establish robust ethical governance frameworks."
+  ],
+  "createdAt": "2026-05-16T14:17:21.000Z",
+  "updatedAt": "2026-05-17T04:02:13.000Z",
+  "__v": 0
+}
+```
+
+---
+
+### 📡 Example API Responses
+
+#### 1. Authentication Login Response (`POST /api/auth/login`)
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZDFlYzQ5YzllMzdjMWQzYzhlNGU5ZiIsImlhdCI6MTc3ODk5MDQ5OSwiZXhwIjoxNzgxNTgyNDk5fQ...",
+  "user": {
+    "_id": "60d5ec49c9e37c1d3c8e4e9f",
+    "name": "Jane Doe",
+    "email": "jane.doe@workspace.ai"
+  }
+}
+```
+
+#### 2. Process AI Action Response (`POST /api/notes/:id/ai`)
+
+Depending on the prompt actions, the server responds with dynamic structured outputs:
+
+##### Action: `summary`
+```json
+{
+  "success": true,
+  "data": {
+    "summary": "AI is the core catalyst of the Fourth Industrial Revolution (4IR), reshaping production, supply chains, and operational workflows globally."
+  },
+  "note": {
+    "_id": "60d5ec49c9e37c1d3c8e4ea0",
+    "userId": "60d5ec49c9e37c1d3c8e4e9f",
+    "title": "Artificial Intelligence in the Fourth Industrial Revolution (4IR)",
+    "content": "...",
+    "aiSummary": "AI is the core catalyst of the Fourth Industrial Revolution (4IR), reshaping production, supply chains, and operational workflows globally."
+  }
+}
+```
+
+##### Action: `action_items`
+```json
+{
+  "success": true,
+  "data": {
+    "actionItems": [
+      "Synthesize production and logistics data to drive insights.",
+      "Formulate strategic guidelines for safe technology adoption.",
+      "Establish robust ethical governance frameworks."
+    ]
+  }
+}
+```
+
+##### Action: `insights`
+```json
+{
+  "success": true,
+  "data": {
+    "readingTime": "2 min read",
+    "category": "Technology",
+    "sentiment": "Positive",
+    "complexity": "Intermediate"
+  }
+}
+```
+
+##### Action: `title` / `auto_title`
+```json
+{
+  "success": true,
+  "data": {
+    "suggestedTitle": "AI: The Engine of 4IR"
+  }
+}
+```
+
+---
+
+### ✨ AI-Generated Summaries Example
+
+When processing unstructured notes (e.g. brainstorming sessions or raw meeting transcripts), the Gemini-powered pipeline produces high-quality, highly synthesized context:
+
+* **Unstructured Input Note:**
+  > "We need to focus on migrating all state tracking variables to standard bearer tokens. Right now we are getting constant 401 response errors on Safari and Brave browsers due to cookies getting rejected in cross-site redirects. Let's write an Axios request interceptor. Let's make sure Vercel environment base URL is robust and always appends /api."
+* **AI-Generated Summary Output:**
+  > "Migration of client-side authentication from standard session cookies to Stateless JWT Bearer tokens to resolve Safari/Brave cross-domain blocking issues, including interceptor development and Base URL config fortification."
+* **AI-Generated Action Items Checklist:**
+  * [x] Implement JWT token storage in browser `localStorage`.
+  * [ ] Build Axios Request Interceptor to dynamic attach Bearer authorization headers.
+  * [ ] Validate and append `/api` routing paths to Vercel environment configurations.
