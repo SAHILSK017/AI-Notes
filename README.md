@@ -139,8 +139,8 @@ The core MongoDB documents are defined as follows:
 ```json
 {
   "_id": "60d5ec49c9e37c1d3c8e4e9f",
-  "name": "Jane Doe",
-  "email": "jane.doe@workspace.ai",
+  "name": "sahil",
+  "email": "sk@gmail.com",
   "createdAt": "2026-05-15T02:21:47.000Z",
   "updatedAt": "2026-05-15T02:21:47.000Z",
   "__v": 0
@@ -182,8 +182,8 @@ The core MongoDB documents are defined as follows:
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZDFlYzQ5YzllMzdjMWQzYzhlNGU5ZiIsImlhdCI6MTc3ODk5MDQ5OSwiZXhwIjoxNzgxNTgyNDk5fQ...",
   "user": {
     "_id": "60d5ec49c9e37c1d3c8e4e9f",
-    "name": "Jane Doe",
-    "email": "jane.doe@workspace.ai"
+    "name": "sahil",
+    "email": "sk@gmail.com"
   }
 }
 ```

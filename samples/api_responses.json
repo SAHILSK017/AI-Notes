@@ -10,7 +10,7 @@
       "path": "/auth/login",
       "description": "Authenticate user and return JWT stateless token.",
       "request_body": {
-        "email": "jane.doe@workspace.ai",
+        "email": "sk@gmail.com",
         "password": "securepassword123"
       },
       "response": {
@@ -18,8 +18,8 @@
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZDFlYzQ5YzllMzdjMWQzYzhlNGU5ZiIsImlhdCI6MTc3ODk5MDQ5OSwiZXhwIjoxNzgxNTgyNDk5fQ...",
         "user": {
           "_id": "60d5ec49c9e37c1d3c8e4e9f",
-          "name": "Jane Doe",
-          "email": "jane.doe@workspace.ai"
+          "name": "sahil",
+          "email": "sk@gmail.com"
         }
       }
     },
