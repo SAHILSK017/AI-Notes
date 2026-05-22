@@ -1,54 +1,66 @@
-# Dependencies
+# Dependency Directories
 node_modules/
-*/node_modules/
+**/node_modules/
 jspm_packages/
+.pnp
+.pnp.*
 
-# Next.js
+# Next.js Build Output and Cache
 .next/
-*/.next/
+**/.next/
 out/
-build/
-dist/
+/build
+/dist
+*.tsbuildinfo
+next-env.d.ts
 
-# Environment Variables
+# Production and Local Environment Variables
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
 *.env
-*/.env*
+**/.env*
+**/*.env*
 
-# Logs
+# Log Files and Diagnostics
+*.log
+**/*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-logs
-*.log
-*/logs
+logs/
+**/logs/
 
-# Debug
+# Development Tools and Framework Caches
 .vercel
 .turbo
 .npm
 .cache
+.eslintcache
 
-# IDEs and Editors
+# Editor and IDE Settings
 .vscode/
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 *.swp
 *.swo
-.DS_Store
-Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
-# Testing
+# Testing and Coverage
 coverage/
-*/coverage/
+**/coverage/
+.nyc_output/
 
-# OS Files
+# OS System Files
 .DS_Store
 .DS_Store?
 ._*
@@ -56,3 +68,10 @@ coverage/
 .Trashes
 ehthumbs.db
 Thumbs.db
+Desktop.ini
+
+# Project Specific Local Assets
+ai_prompt_history/
+ai_prompt_history.zip
+test-url.js
+client/public/login-bg-cropped.png

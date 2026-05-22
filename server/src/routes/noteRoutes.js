@@ -16,11 +16,12 @@ const { createNoteValidator, updateNoteValidator, aiActionValidator } = require(
 
 const router = express.Router();
 
-// AI-specific rate limiter: 10 requests per minute per user IP
+// AI-specific rate limiter: 25 requests per minute per user
 const aiRateLimit = rateLimit({
   windowMs: 60 * 1000,
   max: 25,
-  keyGenerator: (req) => req.user?.id || req.ip,
+  keyGenerator: (req) => req.user.id.toString(),
+  validate: { ip: false },
   handler: (req, res) => {
     res.status(429).json({
       success: false,

@@ -16,7 +16,7 @@ export default function Home() {
           <div className="w-10 h-10 bg-[#d6a96d] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(214,169,109,0.3)]">
             <Sparkles className="text-[#111315] w-6 h-6" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">AI Notes</span>
+          <span className="text-xl font-bold tracking-tight text-white">NeuralDesk</span>
         </div>
         
         <div className="flex items-center gap-4">

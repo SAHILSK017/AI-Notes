@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NeuralDesk Frontend Client (Next.js) 🌐
 
-## Getting Started
+This is the client-side interface for **NeuralDesk (AI Notes)**, built using Next.js. It features a cinematic visual workspace, a highly interactive vintage desk lamp, dynamic glow themes, and AI sidepanel tools.
 
-First, run the development server:
+## 🚀 Key Technologies
+- **Core:** Next.js (App Router), React, JavaScript
+- **Styling:** TailwindCSS, Custom HSL color tokens, Glassmorphic cards
+- **State Management & Caching:** TanStack Query (React Query)
+- **Animations:** GSAP (GreenSock Animation Platform) for physics-based physical pull-chain animations
+- **Audio:** Web Audio API (native browser sound synthesis for switches)
+- **Icons:** Lucide React
+
+## ⚙️ Development Setup
+
+First, ensure you have installed dependencies:
+
+```bash
+npm install
+```
+
+### Environment Configuration
+Create a `.env.local` file inside this directory to connect to your local backend gateway API:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+### Run Server
+
+Run the local next development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📦 Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To compile a highly optimized production bundle:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Then run the production server locally:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run start
+```

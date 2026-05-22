@@ -68,34 +68,52 @@ exports.processAiAction = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Note not found with id of ${req.params.id}`, 404));
   }
 
-  if (!note.content || note.content.trim() === '') {
-    return next(new ErrorResponse('Note is empty. Please add content before using AI features.', 400));
+  const contentToAnalyze = req.body.text || note.content;
+
+  if (!contentToAnalyze || contentToAnalyze.trim() === '') {
+    return next(new ErrorResponse('Content is empty. Please add content before using AI features.', 400));
   }
 
   // --- Check cache first ---
-  const cacheKey = getCacheKey(note.content, action);
+  const cacheKey = getCacheKey(contentToAnalyze, action);
   const cached = getFromCache(cacheKey);
   if (cached) {
     return res.status(200).json({ success: true, data: cached, note, cached: true });
   }
 
   try {
-    const result = await generateNoteInsights(note.content, action);
+    const result = await generateNoteInsights(contentToAnalyze, action);
 
     // Auto-save structured AI outputs to the note document
     let isModified = false;
-    if (action === 'summary' && result.summary) {
-      note.aiSummary = result.summary;
+
+    // Save and merge action items even if req.body.text is set (since live tasks refresh with text)
+    if (action === 'action_items' && result.actionItems) {
+      const existingMap = new Map((note.aiActionItems || []).map(item => {
+        const key = typeof item === 'string' ? item : item.text;
+        return [key, item];
+      }));
+      note.aiActionItems = result.actionItems.map(text => {
+        if (existingMap.has(text)) {
+          const existing = existingMap.get(text);
+          return typeof existing === 'string' ? { text, completed: false } : existing;
+        }
+        return { text, completed: false };
+      });
       isModified = true;
-    } else if (action === 'action_items' && result.actionItems) {
-      note.aiActionItems = result.actionItems;
-      isModified = true;
-    } else if (action === 'insights' && result.category) {
-      note.category = result.category;
-      isModified = true;
-    } else if ((action === 'title' || action === 'auto_title') && result.suggestedTitle) {
-      note.title = result.suggestedTitle;
-      isModified = true;
+    }
+
+    if (!req.body.text) {
+      if (action === 'summary' && result.summary) {
+        note.aiSummary = result.summary;
+        isModified = true;
+      } else if (action === 'insights' && result.category) {
+        note.category = result.category;
+        isModified = true;
+      } else if ((action === 'title' || action === 'auto_title') && result.suggestedTitle) {
+        note.title = result.suggestedTitle;
+        isModified = true;
+      }
     }
 
     if (isModified) {

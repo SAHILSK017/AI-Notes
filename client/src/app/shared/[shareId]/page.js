@@ -42,7 +42,7 @@ export default function SharedNote() {
       <header className="h-16 border-b border-border flex items-center px-6 bg-card shadow-sm sticky top-0 z-10">
         <div className="flex items-center gap-2 font-bold text-xl text-primary">
           <FileText className="w-6 h-6" />
-          <span>AI Notes</span>
+          <span>NeuralDesk</span>
           <span className="text-sm font-normal text-muted-foreground ml-4 bg-secondary px-3 py-1 rounded-full">Shared View</span>
         </div>
       </header>
@@ -90,12 +90,16 @@ export default function SharedNote() {
                 <div className="bg-card p-4 rounded-xl border border-border shadow-sm">
                   <h4 className="font-bold text-sm mb-3 text-primary">Action Items</h4>
                   <ul className="space-y-2">
-                    {note.aiActionItems.map((item, i) => (
-                      <li key={i} className="text-sm flex gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-                        <span className="text-muted-foreground leading-relaxed">{item}</span>
-                      </li>
-                    ))}
+                    {note.aiActionItems.map((item, i) => {
+                      const text = typeof item === 'string' ? item : item.text;
+                      const isCompleted = typeof item === 'string' ? false : !!item.completed;
+                      return (
+                        <li key={i} className="text-sm flex gap-2">
+                          <span className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${isCompleted ? 'bg-muted-foreground/40' : 'bg-primary'}`} />
+                          <span className={`leading-relaxed ${isCompleted ? 'line-through text-muted-foreground/50' : 'text-muted-foreground'}`}>{text}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )}

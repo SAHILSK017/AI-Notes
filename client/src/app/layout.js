@@ -5,7 +5,7 @@ import { Providers } from '../components/Providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'AI Notes Workspace',
+  title: 'NeuralDesk Workspace',
   description: 'A production-ready full-stack notes application featuring AI summarization.',
 };
 

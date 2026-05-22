@@ -32,6 +32,10 @@ const noteSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
     shareId: {
       type: String,
       unique: true,
@@ -42,7 +46,12 @@ const noteSchema = new mongoose.Schema(
       default: '',
     },
     aiActionItems: {
-      type: [String],
+      type: [
+        {
+          text: { type: String, required: true },
+          completed: { type: Boolean, default: false }
+        }
+      ],
       default: [],
     },
   },
