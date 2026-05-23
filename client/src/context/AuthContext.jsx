@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable react-hooks/set-state-in-effect */
-
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import api from '../lib/axios';
@@ -70,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.post('/auth/logout');
     } catch (e) {
-      // Ignore logout errors
+      // intentional — logout errors shouldn't block the user from being signed out
     }
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
@@ -79,18 +77,13 @@ export const AuthProvider = ({ children }) => {
     router.push('/login');
   };
 
-  // Protect routes based on path
   useEffect(() => {
     if (!loading) {
       const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup');
       const isProtectedRoute = pathname.startsWith('/dashboard') || pathname.startsWith('/notes');
 
-      if (!user && isProtectedRoute) {
-        router.push('/login');
-      }
-      if (user && isAuthRoute) {
-        router.push('/dashboard');
-      }
+      if (!user && isProtectedRoute) router.push('/login');
+      if (user && isAuthRoute) router.push('/dashboard');
     }
   }, [user, loading, pathname, router]);
 

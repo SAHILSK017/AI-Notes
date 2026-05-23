@@ -1,10 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
-
-// Load environment variables
-dotenv.config();
 
 const { errorHandler } = require('./middleware/error');
 const authRoutes = require('./routes/authRoutes');
@@ -32,3 +28,4 @@ app.get('/health', (req, res) => {
 app.use(errorHandler);
 
 module.exports = app;
+

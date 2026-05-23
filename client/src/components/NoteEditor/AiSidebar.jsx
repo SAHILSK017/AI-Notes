@@ -523,152 +523,18 @@ export default function AiSidebar({
           {/* Dynamic Result Area with improved contrast */}
           <div className="space-y-4 pt-2">
             {!isGenerating && summary && (
-              <div className="bg-secondary/30 rounded-2xl border border-primary/30 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-700">
-                <div className="p-6">
-                  <h4 className="font-black text-[10px] uppercase tracking-[0.3em] mb-4 text-primary flex items-center gap-2.5">
-                    <AlignLeft className="w-3.5 h-3.5" /> Synthesized Essence
-                  </h4>
-                  <p className="text-sm text-foreground leading-relaxed font-bold italic">
-                    &ldquo;{summary}&rdquo;
-                    {isTyping && <span className="inline-block w-1 h-3.5 bg-primary ml-1 animate-pulse align-text-bottom shadow-[0_0_10px_color-mix(in_srgb,var(--color-primary)_50%,transparent)]" />}
-                  </p>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-              </div>
+              <SummaryCard summary={summary} isTyping={isTyping} />
             )}
 
             {!isGenerating && thinkPartnerData && (
-              <div className="bg-secondary/30 rounded-2xl border border-pink-500/30 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-700">
-                <div className="p-6 space-y-6">
-                  <div className="flex items-center justify-between border-b border-pink-500/10 pb-4">
-                    <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-pink-500 flex items-center gap-2.5">
-                      <BrainCircuit className="w-3.5 h-3.5" /> Neural Expansion
-                    </h4>
-                    <div className="flex items-center gap-2">
-                      {hasInserted ? (
-                        <button
-                          onClick={onUndoThinkPartner}
-                          className="px-2.5 py-1 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-[9px] font-black uppercase tracking-widest text-amber-500 rounded-lg active:scale-95 transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)]"
-                        >
-                          Undo Add
-                        </button>
-                      ) : (
-                        onInsertThinkPartner && (
-                          <button
-                            onClick={onInsertThinkPartner}
-                            className="px-2.5 py-1 bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/35 text-[9px] font-black uppercase tracking-widest text-pink-500 rounded-lg active:scale-95 transition-all shadow-[0_0_15px_rgba(236,72,153,0.1)]"
-                          >
-                            Add to Note
-                          </button>
-                        )
-                      )}
-                      {onDismissThinkPartner && (
-                        <button
-                          onClick={onDismissThinkPartner}
-                          title="Dismiss Card"
-                          className="p-1 hover:bg-pink-500/10 border border-transparent hover:border-pink-500/25 text-pink-500/70 hover:text-pink-500 rounded-lg active:scale-95 transition-all"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  
-                  {thinkPartnerData.risks && thinkPartnerData.risks.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-rose-500 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        ⚠️ Missing Risks
-                      </h5>
-                      <ul className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold">
-                        {thinkPartnerData.risks.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {thinkPartnerData.practicalInsights && thinkPartnerData.practicalInsights.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        Practical Insights
-                      </h5>
-                      <ul className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold">
-                        {thinkPartnerData.practicalInsights.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {thinkPartnerData.simpleImprovements && thinkPartnerData.simpleImprovements.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        Simple Improvements
-                      </h5>
-                      <ul className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold">
-                        {thinkPartnerData.simpleImprovements.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {thinkPartnerData.flaws && thinkPartnerData.flaws.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-amber-500 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        🔍 Flaws in Thinking
-                      </h5>
-                      <ul className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold">
-                        {thinkPartnerData.flaws.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {thinkPartnerData.businessModels && thinkPartnerData.businessModels.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-primary uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        💼 Business Models
-                      </h5>
-                      <ul className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold">
-                        {thinkPartnerData.businessModels.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {thinkPartnerData.executionPlan && thinkPartnerData.executionPlan.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        📋 Execution Plan
-                      </h5>
-                      <ol className="space-y-1.5 pl-3 list-decimal text-xs text-foreground font-bold">
-                        {thinkPartnerData.executionPlan.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ol>
-                    </div>
-                  )}
-
-                  {thinkPartnerData.competitors && thinkPartnerData.competitors.length > 0 && (
-                    <div>
-                      <h5 className="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        🏢 Competitors & Landscape
-                      </h5>
-                      <ul className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold">
-                        {thinkPartnerData.competitors.map((item, idx) => (
-                          <li key={idx} className="leading-relaxed">{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-pink-500/60 to-transparent" />
-              </div>
+              <ThinkPartnerCard
+                data={thinkPartnerData}
+                hasInserted={hasInserted}
+                onInsert={onInsertThinkPartner}
+                onUndo={onUndoThinkPartner}
+                onDismiss={onDismissThinkPartner}
+              />
             )}
-
           </div>
             </>
           )}
@@ -679,6 +545,95 @@ export default function AiSidebar({
       <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent" />
     </aside>
   </>
+  );
+}
+
+function SummaryCard({ summary, isTyping }) {
+  return (
+    <div className="bg-secondary/30 rounded-2xl border border-primary/30 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-700">
+      <div className="p-6">
+        <h4 className="font-black text-[10px] uppercase tracking-[0.3em] mb-4 text-primary flex items-center gap-2.5">
+          <AlignLeft className="w-3.5 h-3.5" /> Synthesized Essence
+        </h4>
+        <p className="text-sm text-foreground leading-relaxed font-bold italic">
+          &ldquo;{summary}&rdquo;
+          {isTyping && (
+            <span className="inline-block w-1 h-3.5 bg-primary ml-1 animate-pulse align-text-bottom shadow-[0_0_10px_color-mix(in_srgb,var(--color-primary)_50%,transparent)]" />
+          )}
+        </p>
+      </div>
+      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+    </div>
+  );
+}
+
+function ThinkPartnerCard({ data, hasInserted, onInsert, onUndo, onDismiss }) {
+  const sections = [
+    { key: 'risks',             label: '⚠️ Missing Risks',         color: 'text-rose-500',    tag: 'ul' },
+    { key: 'practicalInsights', label: 'Practical Insights',        color: 'text-blue-500',    tag: 'ul' },
+    { key: 'simpleImprovements',label: 'Simple Improvements',       color: 'text-emerald-500', tag: 'ul' },
+    { key: 'flaws',             label: '🔍 Flaws in Thinking',      color: 'text-amber-500',   tag: 'ul' },
+    { key: 'businessModels',    label: '💼 Business Models',        color: 'text-primary',     tag: 'ul' },
+    { key: 'executionPlan',     label: '📋 Execution Plan',         color: 'text-emerald-500', tag: 'ol' },
+    { key: 'competitors',       label: '🏢 Competitors & Landscape', color: 'text-blue-500',   tag: 'ul' },
+  ];
+
+  return (
+    <div className="bg-secondary/30 rounded-2xl border border-pink-500/30 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-700">
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-between border-b border-pink-500/10 pb-4">
+          <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-pink-500 flex items-center gap-2.5">
+            <BrainCircuit className="w-3.5 h-3.5" /> Neural Expansion
+          </h4>
+          <div className="flex items-center gap-2">
+            {hasInserted ? (
+              <button
+                onClick={onUndo}
+                className="px-2.5 py-1 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-[9px] font-black uppercase tracking-widest text-amber-500 rounded-lg active:scale-95 transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+              >
+                Undo Add
+              </button>
+            ) : (
+              onInsert && (
+                <button
+                  onClick={onInsert}
+                  className="px-2.5 py-1 bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/35 text-[9px] font-black uppercase tracking-widest text-pink-500 rounded-lg active:scale-95 transition-all shadow-[0_0_15px_rgba(236,72,153,0.1)]"
+                >
+                  Add to Note
+                </button>
+              )
+            )}
+            {onDismiss && (
+              <button
+                onClick={onDismiss}
+                title="Dismiss Card"
+                className="p-1 hover:bg-pink-500/10 border border-transparent hover:border-pink-500/25 text-pink-500/70 hover:text-pink-500 rounded-lg active:scale-95 transition-all"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {sections.map(({ key, label, color, tag: Tag }) => {
+          const items = data[key];
+          if (!items || items.length === 0) return null;
+          return (
+            <div key={key}>
+              <h5 className={`text-[9px] font-black uppercase tracking-widest mb-2 flex items-center gap-1.5 ${color}`}>
+                {label}
+              </h5>
+              <Tag className="space-y-1.5 pl-3 list-disc text-xs text-foreground font-bold" style={Tag === 'ol' ? { listStyleType: 'decimal' } : {}}>
+                {items.map((item, idx) => (
+                  <li key={idx} className="leading-relaxed">{item}</li>
+                ))}
+              </Tag>
+            </div>
+          );
+        })}
+      </div>
+      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-pink-500/60 to-transparent" />
+    </div>
   );
 }
 

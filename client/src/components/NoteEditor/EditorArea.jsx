@@ -203,10 +203,8 @@ export default function EditorArea({
 
   return (
     <div ref={editorScrollRef} className="flex-1 overflow-y-auto custom-scrollbar relative [overflow-anchor:none]">
-      {/* Centered Focused Writing Area */}
       <div className="max-w-[800px] mx-auto w-full px-8 py-12 min-h-full flex flex-col animate-in fade-in duration-1000 slide-in-from-bottom-4">
-        
-        {/* Workspace Metadata Indicator */}
+
         <div className="flex items-center gap-4 mb-8 opacity-70">
           <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-muted-foreground">
             <Feather className="w-3.5 h-3.5" />
@@ -215,7 +213,6 @@ export default function EditorArea({
           <div className="h-px flex-1 bg-gradient-to-r from-muted-foreground to-transparent" />
         </div>
 
-        {/* Title Input with Premium Typography */}
         <div className="relative group mb-6">
           <input
             type="text"
@@ -229,7 +226,6 @@ export default function EditorArea({
           />
         </div>
         
-        {/* Categorization with Glass Effect */}
         <div className="flex items-center gap-4 mb-10 bg-card border border-border focus-within:border-primary/40 focus-within:bg-secondary/40 transition-all px-6 py-3.5 rounded-2xl group/tags shadow-xl">
           <div className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center group-focus-within/tags:bg-primary/10 group-focus-within/tags:text-primary transition-colors text-muted-foreground/30">
             <Hash className="w-3.5 h-3.5" />
@@ -246,7 +242,6 @@ export default function EditorArea({
           />
         </div>
 
-        {/* Body Editor with Premium Readability */}
         <div className="relative flex-1">
           <textarea
             ref={textareaRef}
@@ -265,7 +260,6 @@ export default function EditorArea({
             onSelect={handleSelect}
           />
 
-          {/* Live Suggestion Card */}
           {showSuggestion && suggestion?.insight && (
             <div className="mt-3 ml-auto w-full max-w-[560px] p-4 rounded-lg bg-primary/5 border border-primary/20 backdrop-blur-md flex flex-col gap-4 animate-in slide-in-from-bottom-2 duration-300">
               <div className="flex-1">
@@ -396,7 +390,6 @@ export default function EditorArea({
           </section>
         )}
 
-        {/* Footer Credit */}
         <div className="mt-12 pt-6 border-t border-border/40 flex items-center justify-between opacity-55">
           <div className="flex items-center gap-3">
             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Autosave enabled</span>
@@ -410,11 +403,9 @@ export default function EditorArea({
         </div>
       </div>
       
-      {/* Editor Side Lighting */}
       <div className="absolute top-1/4 -left-40 w-80 h-[500px] bg-primary/2 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 -right-40 w-80 h-[500px] bg-blue-500/[0.01] blur-[120px] rounded-full pointer-events-none" />
 
-      {/* Floating AI Bar for Highlighted Selection */}
       {showAiBar && selectedText && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-md border border-primary/30 px-6 py-4 rounded-3xl shadow-2xl z-30 flex items-center gap-4 animate-in slide-in-from-bottom-4 duration-300">
           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary shrink-0">
@@ -474,7 +465,6 @@ export default function EditorArea({
         </div>
       )}
 
-      {/* Floating Suggestion Preview Card */}
       {showPreview && aiResult && (
         <div className="fixed bottom-28 left-1/2 -translate-x-1/2 w-[550px] max-w-[90vw] bg-card/95 backdrop-blur-md border border-border p-6 rounded-[2.25rem] shadow-2xl z-30 animate-in zoom-in-95 duration-200">
           <div className="flex items-center justify-between mb-4">

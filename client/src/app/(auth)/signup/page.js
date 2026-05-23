@@ -38,6 +38,20 @@ export default function Signup() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
         <div className="absolute inset-0 bg-black/20" />
+
+        {/* Cinematic volumetric lighting overlay: Bookshelf ambient glow */}
+        <div 
+          className={`absolute inset-0 bg-[radial-gradient(circle_at_73%_44%,rgba(253,186,116,0.16)_0%,transparent_60%)] pointer-events-none mix-blend-color-dodge transition-opacity duration-[800ms] z-10 ${
+            isOn ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        {/* Cinematic volumetric lighting overlay: Table wood grain reflection */}
+        <div 
+          className={`absolute bottom-[18%] left-[55%] w-[340px] h-[140px] bg-[radial-gradient(ellipse_at_center,rgba(253,186,116,0.25)_0%,transparent_70%)] blur-sm pointer-events-none mix-blend-color-dodge transition-opacity duration-[800ms] z-10 ${
+            isOn ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
         
         <div className="relative z-10 p-16 flex flex-col justify-between h-full">
           <div>
@@ -75,7 +89,13 @@ export default function Signup() {
         </div>
 
         {/* Interactive Desk Lamp overlaying the static lamp on the table */}
-        <div className="absolute bottom-[26%] right-[7%] z-20 scale-[0.78] origin-bottom-right">
+        <div className="absolute bottom-[31%] right-[6%] z-20 scale-[1.15] lg:scale-[1.4] origin-bottom-right">
+          {/* Ambient base shadow cast by the heavy brass pedestal */}
+          <div 
+            className={`absolute left-[117px] top-[286px] w-24 h-4 bg-black/60 blur-[3px] rounded-full pointer-events-none transition-opacity duration-[800ms] z-10 ${
+              isOn ? 'opacity-40' : 'opacity-80'
+            }`}
+          />
           <DeskLamp isOn={isOn} onToggle={() => setIsOn(!isOn)} />
         </div>
       </div>

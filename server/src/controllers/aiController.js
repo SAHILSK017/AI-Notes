@@ -1,38 +1,9 @@
-const crypto = require('crypto');
 const Note = require('../models/Note');
 const { ErrorResponse } = require('../middleware/error');
 const asyncHandler = require('../utils/asyncHandler');
 const { generateNoteInsights } = require('../services/aiService');
+const aiCache = require('../utils/aiCache');
 
-// --- In-memory response cache (content hash + action → result, TTL 5 min) ---
-const aiCache = new Map();
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
-
-function getCacheKey(content, action) {
-  const hash = crypto.createHash('sha256').update(content).digest('hex').slice(0, 16);
-  return `${action}:${hash}`;
-}
-
-function getFromCache(key) {
-  const entry = aiCache.get(key);
-  if (!entry) return null;
-  if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
-    aiCache.delete(key);
-    return null;
-  }
-  return entry.data;
-}
-
-function setCache(key, data) {
-  // Prevent unbounded growth — keep max 200 entries
-  if (aiCache.size >= 200) {
-    const firstKey = aiCache.keys().next().value;
-    aiCache.delete(firstKey);
-  }
-  aiCache.set(key, { data, timestamp: Date.now() });
-}
-
-// --- Map Gemini/HTTP errors to clean user-facing messages ---
 function friendlyError(error) {
   const msg = (error?.message || '').toLowerCase();
   const status = error?.status || error?.response?.status;
@@ -52,9 +23,6 @@ function friendlyError(error) {
   return { message: 'AI processing failed. Please try again shortly.', code: 500 };
 }
 
-// @desc    Process AI actions on a note
-// @route   POST /api/notes/:id/ai
-// @access  Private
 exports.processAiAction = asyncHandler(async (req, res, next) => {
   const { action } = req.body;
 
@@ -74,9 +42,8 @@ exports.processAiAction = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Content is empty. Please add content before using AI features.', 400));
   }
 
-  // --- Check cache first ---
-  const cacheKey = getCacheKey(contentToAnalyze, action);
-  const cached = getFromCache(cacheKey);
+  const cacheKey = aiCache.getCacheKey(contentToAnalyze, action);
+  const cached = aiCache.get(cacheKey);
   if (cached) {
     return res.status(200).json({ success: true, data: cached, note, cached: true });
   }
@@ -84,10 +51,8 @@ exports.processAiAction = asyncHandler(async (req, res, next) => {
   try {
     const result = await generateNoteInsights(contentToAnalyze, action);
 
-    // Auto-save structured AI outputs to the note document
     let isModified = false;
 
-    // Save and merge action items even if req.body.text is set (since live tasks refresh with text)
     if (action === 'action_items' && result.actionItems) {
       const existingMap = new Map((note.aiActionItems || []).map(item => {
         const key = typeof item === 'string' ? item : item.text;
@@ -116,12 +81,9 @@ exports.processAiAction = asyncHandler(async (req, res, next) => {
       }
     }
 
-    if (isModified) {
-      await note.save();
-    }
+    if (isModified) await note.save();
 
-    // Cache the result
-    setCache(cacheKey, result);
+    aiCache.set(cacheKey, result);
 
     return res.status(200).json({ success: true, data: result, note });
   } catch (error) {

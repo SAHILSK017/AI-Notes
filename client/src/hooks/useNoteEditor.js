@@ -1,11 +1,9 @@
-'use client';
-
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import api from '../lib/axios';
-import { useDebounce } from '../lib/hooks';
+import { useDebounce } from './useDebounce';
 
 export function useNoteEditor() {
   const { id } = useParams();
@@ -340,65 +338,34 @@ export function useNoteEditor() {
 
   const insertThinkPartner = () => {
     if (!thinkPartnerData) return;
-    
-    // Save state before insertion into history
+
     setHistory(prev => {
-      const nextHist = [...prev, {
-        title,
-        content,
-        tags
-      }];
-      if (nextHist.length > 20) nextHist.shift();
-      return nextHist;
+      const next = [...prev, { title, content, tags }];
+      if (next.length > 20) next.shift();
+      return next;
     });
-    setLastSavedState({
-      title,
-      content,
-      tags
-    });
-    
+    setLastSavedState({ title, content, tags });
+
+    const sections = [
+      { heading: '⚠️ Missing Risks',        key: 'risks',              tag: 'ul' },
+      { heading: '🔍 Flaws in Thinking',    key: 'flaws',              tag: 'ul' },
+      { heading: '💼 Business Models',       key: 'businessModels',     tag: 'ul' },
+      { heading: '📋 Execution Plan',        key: 'executionPlan',      tag: 'ol' },
+      { heading: '🏢 Competitors & Landscape', key: 'competitors',      tag: 'ul' },
+    ];
+
     let markdown = '\n\n---\n### 🧠 AI Thought Expansion\n\n';
-    
-    if (thinkPartnerData.risks && thinkPartnerData.risks.length > 0) {
-      markdown += '#### ⚠️ Missing Risks\n';
-      thinkPartnerData.risks.forEach(item => {
-        markdown += `- ${item}\n`;
+
+    sections.forEach(({ heading, key, tag }) => {
+      const items = thinkPartnerData[key];
+      if (!items || items.length === 0) return;
+      markdown += `#### ${heading}\n`;
+      items.forEach((item, idx) => {
+        markdown += tag === 'ol' ? `${idx + 1}. ${item}\n` : `- ${item}\n`;
       });
       markdown += '\n';
-    }
-    
-    if (thinkPartnerData.flaws && thinkPartnerData.flaws.length > 0) {
-      markdown += '#### 🔍 Flaws in Thinking\n';
-      thinkPartnerData.flaws.forEach(item => {
-        markdown += `- ${item}\n`;
-      });
-      markdown += '\n';
-    }
-    
-    if (thinkPartnerData.businessModels && thinkPartnerData.businessModels.length > 0) {
-      markdown += '#### 💼 Business Models\n';
-      thinkPartnerData.businessModels.forEach(item => {
-        markdown += `- ${item}\n`;
-      });
-      markdown += '\n';
-    }
-    
-    if (thinkPartnerData.executionPlan && thinkPartnerData.executionPlan.length > 0) {
-      markdown += '#### 📋 Execution Plan\n';
-      thinkPartnerData.executionPlan.forEach((item, idx) => {
-        markdown += `${idx + 1}. ${item}\n`;
-      });
-      markdown += '\n';
-    }
-    
-    if (thinkPartnerData.competitors && thinkPartnerData.competitors.length > 0) {
-      markdown += '#### 🏢 Competitors & Landscape\n';
-      thinkPartnerData.competitors.forEach(item => {
-        markdown += `- ${item}\n`;
-      });
-      markdown += '\n';
-    }
-    
+    });
+
     setContent(prev => prev + markdown);
     toast.success('Added thought expansion to your note!');
   };

@@ -74,7 +74,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="flex h-screen bg-background text-foreground overflow-hidden selection:bg-primary/30 selection:text-primary">
-      {/* Mobile Sidebar Backdrop */}
       {isMobileSidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 md:hidden animate-in fade-in duration-200"
@@ -82,7 +81,6 @@ export default function DashboardLayout({ children }) {
         />
       )}
 
-      {/* Premium Sidebar with Glass Effect */}
       <aside 
         className={`fixed inset-y-0 left-0 z-40 border-r border-border/40 bg-card/95 backdrop-blur-3xl flex flex-col transition-[width,transform] duration-300 shadow-2xl md:relative md:translate-x-0 ${
           isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -175,7 +173,6 @@ export default function DashboardLayout({ children }) {
             );
           })}
 
-          {/* Recent Notes Section */}
           {recentNotes && recentNotes.length > 0 && (
             <div className={`pt-10 pb-4 transition-all duration-300 ${isCollapsed ? 'opacity-0 max-h-0 overflow-hidden pointer-events-none' : 'opacity-100'}`}>
               <h4 className="text-[9px] font-black text-muted-foreground/75 uppercase tracking-[0.3em] mb-5 px-4">Recently Archived</h4>
@@ -203,7 +200,6 @@ export default function DashboardLayout({ children }) {
           )}
         </nav>
 
-        {/* Sidebar Footer */}
         <div className={`border-t border-border/40 mt-auto bg-secondary/20 transition-all duration-300 ${isCollapsed ? 'p-3' : 'p-6'}`}>
           <div className={`flex items-center group cursor-pointer transition-all duration-300 ${isCollapsed ? 'justify-center mb-4' : 'gap-4 mb-8 px-2'}`} title={isCollapsed ? user?.name : undefined}>
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-card to-secondary border border-border flex items-center justify-center text-primary font-black shadow-xl group-hover:border-primary/40 transition-all shrink-0">
@@ -236,74 +232,85 @@ export default function DashboardLayout({ children }) {
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto bg-background relative flex flex-col custom-scrollbar">
-        {/* Cinematic Lighting Layers */}
         <div className="fixed top-0 right-0 w-[1000px] h-[800px] bg-primary/5 blur-[200px] rounded-full -z-10 pointer-events-none translate-x-1/3 -translate-y-1/3 opacity-60 dark:opacity-40" />
         <div className="fixed bottom-0 left-0 w-[800px] h-[700px] bg-blue-500/5 blur-[180px] rounded-full -z-10 pointer-events-none -translate-x-1/3 translate-y-1/3 opacity-40 dark:opacity-20" />
         <div className="fixed top-1/2 left-1/2 w-[1200px] h-[1000px] bg-purple-500/[0.02] blur-[220px] rounded-full -z-10 pointer-events-none -translate-x-1/2 -translate-y-1/2" />
-        
-        {/* Enhanced Header */}
-        <header className="h-24 shrink-0 border-b border-border/40 flex items-center justify-between px-6 md:px-12 bg-background/60 backdrop-blur-2xl sticky top-0 z-10 shadow-sm">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setIsMobileSidebarOpen(true)}
-              className="md:hidden p-2.5 rounded-xl bg-card border border-border text-foreground hover:bg-secondary transition-all active:scale-95 shadow-sm"
-            >
-              <Menu className="w-5 h-5 text-primary" />
-            </button>
-            <div className="flex flex-col">
-              {mounted && currentTime && (
-                <div className="flex items-center gap-3 text-[10px] font-black text-muted-foreground/80 uppercase tracking-[0.3em] mb-1.5 animate-in fade-in duration-500">
-                  <Calendar className="w-3 h-3 text-primary/60" />
-                  <span>{formattedDate}</span>
-                  <span className="mx-1">•</span>
-                  <Clock className="w-3 h-3 text-primary/60" />
-                  <span>{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-              )}
-              <h2 className="text-xl md:text-2xl font-black text-foreground tracking-normal flex items-center gap-3">
-                {mounted ? greetingText : 'Initializing Workspace...'}
-                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-              </h2>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4 md:gap-6">
-            <div className="hidden sm:block relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70 group-focus-within:text-primary transition-colors" />
-              <input 
-                type="text" 
-                placeholder="Deep Search..." 
-                className="bg-card border border-border rounded-[1.25rem] pl-12 pr-6 py-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all w-80 placeholder:text-muted-foreground/55 font-bold animate-all"
-              />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-lg border border-border bg-secondary text-[10px] text-muted-foreground/70 font-black tracking-widest">
-                <Command className="w-3 h-3" /> K
-              </div>
-            </div>
-            
-            <button 
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              className="w-12 h-12 rounded-2xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all shadow-md active:scale-95 group cursor-pointer"
-              title={mounted && theme === 'light' ? 'Cinematic Mode' : 'Daylight Mode'}
-            >
-              {mounted && theme === 'light' ? (
-                <Moon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-              ) : (
-                <Sun className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-              )}
-            </button>
 
-            <button className="w-12 h-12 rounded-2xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all shadow-md active:scale-95 group">
-              <Settings className="w-5 h-5 group-hover:rotate-45 transition-transform duration-500" />
-            </button>
-          </div>
-        </header>
+        <DashboardHeader
+          mounted={mounted}
+          currentTime={currentTime}
+          formattedDate={formattedDate}
+          greetingText={greetingText}
+          theme={theme}
+          setTheme={setTheme}
+          onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
+        />
 
         <div className="flex-1 relative">
           {children}
         </div>
       </main>
     </div>
+  );
+}
+
+function DashboardHeader({ mounted, currentTime, formattedDate, greetingText, theme, setTheme, onOpenMobileSidebar }) {
+  return (
+    <header className="h-24 shrink-0 border-b border-border/40 flex items-center justify-between px-6 md:px-12 bg-background/60 backdrop-blur-2xl sticky top-0 z-10 shadow-sm">
+      <div className="flex items-center gap-4">
+        <button
+          onClick={onOpenMobileSidebar}
+          className="md:hidden p-2.5 rounded-xl bg-card border border-border text-foreground hover:bg-secondary transition-all active:scale-95 shadow-sm"
+        >
+          <Menu className="w-5 h-5 text-primary" />
+        </button>
+        <div className="flex flex-col">
+          {mounted && currentTime && (
+            <div className="flex items-center gap-3 text-[10px] font-black text-muted-foreground/80 uppercase tracking-[0.3em] mb-1.5 animate-in fade-in duration-500">
+              <Calendar className="w-3 h-3 text-primary/60" />
+              <span>{formattedDate}</span>
+              <span className="mx-1">•</span>
+              <Clock className="w-3 h-3 text-primary/60" />
+              <span>{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+          )}
+          <h2 className="text-xl md:text-2xl font-black text-foreground tracking-normal flex items-center gap-3">
+            {mounted ? greetingText : 'Initializing Workspace...'}
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+          </h2>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 md:gap-6">
+        <div className="hidden sm:block relative group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70 group-focus-within:text-primary transition-colors" />
+          <input
+            type="text"
+            placeholder="Deep Search..."
+            className="bg-card border border-border rounded-[1.25rem] pl-12 pr-6 py-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/40 transition-all w-80 placeholder:text-muted-foreground/55 font-bold animate-all"
+          />
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-lg border border-border bg-secondary text-[10px] text-muted-foreground/70 font-black tracking-widest">
+            <Command className="w-3 h-3" /> K
+          </div>
+        </div>
+
+        <button
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          className="w-12 h-12 rounded-2xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all shadow-md active:scale-95 group cursor-pointer"
+          title={mounted && theme === 'light' ? 'Cinematic Mode' : 'Daylight Mode'}
+        >
+          {mounted && theme === 'light' ? (
+            <Moon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+          ) : (
+            <Sun className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+          )}
+        </button>
+
+        <button className="w-12 h-12 rounded-2xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all shadow-md active:scale-95 group">
+          <Settings className="w-5 h-5 group-hover:rotate-45 transition-transform duration-500" />
+        </button>
+      </div>
+    </header>
   );
 }
