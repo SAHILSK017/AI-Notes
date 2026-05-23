@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useId } from 'react';
 import gsap from 'gsap';
 
 export default function DeskLamp({ isOn, onToggle }) {
@@ -10,6 +10,7 @@ export default function DeskLamp({ isOn, onToggle }) {
   const beamRef = useRef(null);
   const bulbRef = useRef(null);
   const ringHintRef = useRef(null);
+  const id = useId();
 
   // 1. Play realistic mechanical switch click sound (Web Audio API)
   const playClickSound = () => {
@@ -155,29 +156,29 @@ export default function DeskLamp({ isOn, onToggle }) {
       >
         <defs>
           {/* Gaussian blur for smooth volumetric light edges */}
-          <filter id="soft-blur" x="-50%" y="-50%" width="200%" height="200%">
+          <filter id={`soft-blur-${id}`} x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="8" />
           </filter>
 
           {/* Premium brass/metallic neck gradients */}
-          <linearGradient id="gold-brass" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`gold-brass-${id}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#fae5b6" />
             <stop offset="35%" stopColor="#d4af37" />
             <stop offset="70%" stopColor="#9e7c11" />
             <stop offset="100%" stopColor="#594403" />
           </linearGradient>
-          <linearGradient id="dark-brass-hinge" x1="0%" y1="0%" x2="0%" y2="100%">
+          <linearGradient id={`dark-brass-hinge-${id}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#aa881b" />
             <stop offset="100%" stopColor="#3d2c01" />
           </linearGradient>
           
           {/* Conical pleated shade gradients */}
-          <linearGradient id="shade-glass-off" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`shade-glass-off-${id}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#eae5d9" />
             <stop offset="60%" stopColor="#ccc6b8" />
             <stop offset="100%" stopColor="#a39d90" />
           </linearGradient>
-          <radialGradient id="shade-glass-on" cx="50%" cy="40%" r="65%">
+          <radialGradient id={`shade-glass-on-${id}`} cx="50%" cy="40%" r="65%">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="25%" stopColor="#fff6df" />
             <stop offset="70%" stopColor="#ffd273" />
@@ -185,7 +186,7 @@ export default function DeskLamp({ isOn, onToggle }) {
           </radialGradient>
 
           {/* Light bulb emission */}
-          <radialGradient id="bulb-filament" cx="50%" cy="50%" r="50%">
+          <radialGradient id={`bulb-filament-${id}`} cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="30%" stopColor="#fff2cc" />
             <stop offset="85%" stopColor="#ffb834" stopOpacity="0.8" />
@@ -193,7 +194,7 @@ export default function DeskLamp({ isOn, onToggle }) {
           </radialGradient>
 
           {/* Volumetric warm golden cone gradient */}
-          <linearGradient id="volumetric-cone" x1="0%" y1="0%" x2="0%" y2="100%">
+          <linearGradient id={`volumetric-cone-${id}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#ffd885" stopOpacity="0.4" />
             <stop offset="20%" stopColor="#ffa62b" stopOpacity="0.18" />
             <stop offset="55%" stopColor="#ffa62b" stopOpacity="0.06" />
@@ -205,8 +206,8 @@ export default function DeskLamp({ isOn, onToggle }) {
         <polygon
           ref={beamRef}
           points="97,132 280,320 -86,320"
-          fill="url(#volumetric-cone)"
-          filter="url(#soft-blur)"
+          fill={`url(#volumetric-cone-${id})`}
+          filter={`url(#soft-blur-${id})`}
           className="pointer-events-none transition-all duration-1000 origin-top"
           style={{
             opacity: isOn ? 1 : 0,
@@ -216,29 +217,29 @@ export default function DeskLamp({ isOn, onToggle }) {
 
         {/* 2. Lamp Base (Weighted circular brass pedestal) */}
         {/* Tier 1 - Bottom Ring */}
-        <ellipse cx="165" cy="290" rx="35" ry="9" fill="url(#dark-brass-hinge)" stroke="#3d2c01" strokeWidth="0.5" />
+        <ellipse cx="165" cy="290" rx="35" ry="9" fill={`url(#dark-brass-hinge-${id})`} stroke="#3d2c01" strokeWidth="0.5" />
         {/* Tier 2 - Beveled Ring */}
-        <ellipse cx="165" cy="286" rx="28" ry="7" fill="url(#gold-brass)" stroke="#fae5b6" strokeWidth="0.5" />
-        <path d="M 137 286 C 137 278, 193 278, 193 286 Z" fill="url(#dark-brass-hinge)" />
-        <ellipse cx="165" cy="281" rx="26" ry="6" fill="url(#gold-brass)" />
+        <ellipse cx="165" cy="286" rx="28" ry="7" fill={`url(#gold-brass-${id})`} stroke="#fae5b6" strokeWidth="0.5" />
+        <path d="M 137 286 C 137 278, 193 278, 193 286 Z" fill={`url(#dark-brass-hinge-${id})`} />
+        <ellipse cx="165" cy="281" rx="26" ry="6" fill={`url(#gold-brass-${id})`} />
 
         {/* 3. Curved Gooseneck Neck Stem */}
         {/* Sweeps gracefully from right base up, then arches left over the table */}
         <path
           d="M 165 278 C 165 180, 130 50, 97 90"
           fill="none"
-          stroke="url(#gold-brass)"
+          stroke={`url(#gold-brass-${id})`}
           strokeWidth="6.5"
           strokeLinecap="round"
           className="drop-shadow-lg"
         />
         {/* Base and Head Joint Rings */}
-        <circle cx="165" cy="277" r="5.5" fill="url(#dark-brass-hinge)" />
-        <circle cx="97" cy="90" r="5" fill="url(#dark-brass-hinge)" />
+        <circle cx="165" cy="277" r="5.5" fill={`url(#dark-brass-hinge-${id})`} />
+        <circle cx="97" cy="90" r="5" fill={`url(#dark-brass-hinge-${id})`} />
 
         {/* 4. Socket Hinge and Holder */}
-        <rect x="92" y="93" width="10" height="15" rx="1.5" fill="url(#dark-brass-hinge)" stroke="#261b01" strokeWidth="0.75" />
-        <ellipse cx="97" cy="108" rx="8" ry="2.5" fill="url(#gold-brass)" />
+        <rect x="92" y="93" width="10" height="15" rx="1.5" fill={`url(#dark-brass-hinge-${id})`} stroke="#261b01" strokeWidth="0.75" />
+        <ellipse cx="97" cy="108" rx="8" ry="2.5" fill={`url(#gold-brass-${id})`} />
 
         {/* 5. Glowing Filament Bulb (reveals below glass cone) */}
         <circle
@@ -246,7 +247,7 @@ export default function DeskLamp({ isOn, onToggle }) {
           cx="97"
           cy="128"
           r="10"
-          fill="url(#bulb-filament)"
+          fill={`url(#bulb-filament-${id})`}
           className="pointer-events-none transition-all duration-300"
           style={{ opacity: isOn ? 1 : 0 }}
         />
@@ -257,7 +258,7 @@ export default function DeskLamp({ isOn, onToggle }) {
           {/* Glass Shade Outer Shape */}
           <path
             d="M 85 102 L 109 102 C 115 102, 137 112, 137 138 C 137 142, 57 142, 57 138 C 57 112, 79 102, 85 102 Z"
-            fill={isOn ? 'url(#shade-glass-on)' : 'url(#shade-glass-off)'}
+            fill={isOn ? `url(#shade-glass-on-${id})` : `url(#shade-glass-off-${id})`}
             stroke={isOn ? '#ffeebf' : '#635d51'}
             strokeWidth="1.2"
             className="transition-all duration-1000 drop-shadow-md"
@@ -289,7 +290,7 @@ export default function DeskLamp({ isOn, onToggle }) {
           cy="138"
           rx="18"
           ry="6"
-          fill="url(#bulb-filament)"
+          fill={`url(#bulb-filament-${id})`}
           className="pointer-events-none transition-all duration-300"
           style={{ opacity: isOn ? 1 : 0 }}
         />
@@ -336,7 +337,7 @@ export default function DeskLamp({ isOn, onToggle }) {
             cx="97"
             cy="214"
             r="6.5"
-            fill={isOn ? 'url(#gold-brass)' : 'url(#dark-brass-hinge)'}
+            fill={isOn ? `url(#gold-brass-${id})` : `url(#dark-brass-hinge-${id})`}
             stroke={isOn ? '#ffeabf' : '#3d2c01'}
             strokeWidth="0.75"
             className="transition-all duration-500 group-hover/chain:scale-110 origin-[97px_214px]"
@@ -353,9 +354,11 @@ export default function DeskLamp({ isOn, onToggle }) {
       </svg>
 
       {/* Elegant Hover Interaction Tooltip Tool */}
-      <div className="absolute top-[235px] left-1/2 -translate-x-1/2 bg-[#1b1915]/95 backdrop-blur-md border border-[#ebd08b]/30 px-3.5 py-1.5 rounded-xl pointer-events-none opacity-0 group-hover/lamp:opacity-100 transition-opacity duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+      <div className={`absolute top-[235px] left-1/2 -translate-x-1/2 bg-[#1b1915]/95 backdrop-blur-md border border-[#ebd08b]/30 px-3.5 py-1.5 rounded-xl pointer-events-none transition-opacity duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.4)] ${
+        isOn ? 'opacity-0 group-hover/lamp:opacity-100' : 'opacity-100 lg:opacity-0 group-hover/lamp:opacity-100'
+      }`}>
         <span className="text-[10px] text-[#ebd08b] font-bold uppercase tracking-[0.15em] whitespace-nowrap">
-          {isOn ? 'Turn Off Light' : 'Pull Chain to Light'}
+          {isOn ? 'Turn Off Light' : 'Click Chain to Light'}
         </span>
       </div>
     </div>

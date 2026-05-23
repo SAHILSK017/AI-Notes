@@ -112,17 +112,24 @@ export default function Login() {
         {/* Warm Golden Glow Overlay */}
         <div className={`absolute inset-0 bg-[radial-gradient(circle_at_35%_40%,rgba(214,169,109,0.06)_0%,transparent_70%)] pointer-events-none transition-opacity duration-500 ${isOn ? 'opacity-100' : 'opacity-0'}`} />
 
-        <div className="flex flex-col items-center justify-center w-full max-w-[420px] animate-in fade-in zoom-in-95 duration-700">
+        {/* Instruction when lamp is off */}
+        <div className={`absolute bottom-12 left-0 right-0 flex justify-center transition-all duration-700 pointer-events-none ${isOn ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+          <p className="text-sm md:text-base font-bold text-muted-foreground/40 tracking-[0.2em] uppercase text-center">
+            Light the lamp to login
+          </p>
+        </div>
+
+        <div className="flex flex-col items-center justify-center w-full max-w-[420px] animate-in fade-in zoom-in-95 duration-700 z-10">
           {/* Vintage Desk Lamp Component (stacked above form on mobile/tablet below lg) */}
-          <div className="lg:hidden mb-6">
+          <div className={`lg:hidden transition-all duration-700 ease-in-out ${isOn ? 'mb-6 translate-y-0' : 'mb-0 translate-y-[10vh] scale-110'}`}>
             <DeskLamp isOn={isOn} onToggle={() => setIsOn(!isOn)} />
           </div>
 
           <div 
-            className={`w-full transition-all duration-700 ease-in-out ${
+            className={`w-full transition-all duration-700 ease-in-out relative ${
               isOn 
                 ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto' 
-                : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+                : 'opacity-0 translate-y-8 scale-95 pointer-events-none'
             }`}
           >
             <div className="lg:hidden flex items-center gap-2 mb-10 justify-center">
